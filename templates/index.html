@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroWeather - Premium Weather Forecast</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for fallback icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Background dynamic glow effects -->
+    <div class="bg-glow orange" id="glow-orange"></div>
+    <div class="bg-glow blue" id="glow-blue"></div>
+    <div class="bg-glow purple" id="glow-purple"></div>
+
+    <div class="app-container">
+        <!-- Sidebar / Navigation Panel -->
+        <aside class="sidebar glass-panel">
+            <div class="brand">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-wind"></i>
+                </div>
+                <h2>AeroWeather</h2>
+            </div>
+
+            <!-- Search Area -->
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="city-search" placeholder="Search city..." autocomplete="off">
+                <button id="search-btn" class="icon-btn" title="Search"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <!-- Recent Searches -->
+            <div class="recent-searches">
+                <div class="recent-header">
+                    <h3>Recent Searches</h3>
+                    <button id="clear-recents-btn" title="Clear all history"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+                <ul id="recent-list">
+                    <!-- Dynamic List -->
+                </ul>
+            </div>
+
+            <!-- Settings / Config -->
+            <div class="settings-panel">
+                <h3>Configuration</h3>
+                <div class="setting-item">
+                    <span>Units</span>
+                    <div class="unit-toggle">
+                        <button id="unit-c" class="active">°C</button>
+                        <button id="unit-f">°F</button>
+                    </div>
+                </div>
+                <div class="setting-item API-key-section">
+                    <span>OpenWeather API Key</span>
+                    <div class="key-input-container">
+                        <input type="password" id="api-key-input" placeholder="Paste API Key here...">
+                        <button id="save-key-btn" title="Save API Key"><i class="fa-solid fa-check"></i></button>
+                    </div>
+                    <small>Optional. Defaults to realistic mock data.</small>
+                </div>
+            </div>
+            
+            <div class="footer-credit">
+                <p>Designed with <i class="fa-solid fa-heart"></i> using Flask & JS</p>
+            </div>
+        </aside>
+
+        <!-- Main Display Panel -->
+        <main class="main-content">
+            <!-- Loading Indicator -->
+            <div class="loader-overlay" id="loader">
+                <div class="loader"></div>
+            </div>
+
+            <!-- Error Banner -->
+            <div class="error-banner" id="error-banner">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="error-msg">City not found. Please try again.</span>
+                <button id="close-error" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Weather Details Grid -->
+            <div class="dashboard-grid" id="weather-dashboard">
+                <!-- Top Card: Current Weather Summary -->
+                <section class="current-weather-card glass-panel col-span-2">
+                    <div class="weather-summary-header">
+                        <div class="location-info">
+                            <h1 id="city-name">London</h1>
+                            <span id="country-tag">GB</span>
+                            <p id="local-time">Thursday, 07:45 PM</p>
+                        </div>
+                        <div class="temp-display">
+                            <span id="current-temp">18</span>
+                            <span class="temp-unit">°C</span>
+                        </div>
+                    </div>
+
+                    <div class="weather-summary-footer">
+                        <div class="condition-info">
+                            <div class="weather-icon-container" id="main-weather-icon">
+                                <!-- Dynamic Animated SVG -->
+                            </div>
+                            <div class="condition-text">
+                                <h2 id="weather-condition">Cloudy</h2>
+                                <p id="weather-description">broken clouds</p>
+                            </div>
+                        </div>
+                        <div class="min-max-badge">
+                            <span><i class="fa-solid fa-arrow-up"></i> H: <strong id="temp-max">22°</strong></span>
+                            <span><i class="fa-solid fa-arrow-down"></i> L: <strong id="temp-min">14°</strong></span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Weather metrics stats grid -->
+                <section class="metrics-grid col-span-2">
+                    <!-- Feels Like Card -->
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon"><i class="fa-solid fa-temperature-half"></i></div>
+                        <div class="metric-details">
+                            <h3>Feels Like</h3>
+                            <p id="feels-like">17°C</p>
+                        </div>
+                    </div>
+                    <!-- Humidity Card -->
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon"><i class="fa-solid fa-droplet"></i></div>
+                        <div class="metric-details">
+                            <h3>Humidity</h3>
+                            <p id="humidity">65%</p>
+                        </div>
+                    </div>
+                    <!-- Wind Card -->
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon"><i class="fa-solid fa-wind"></i></div>
+                        <div class="metric-details">
+                            <h3>Wind Speed</h3>
+                            <p id="wind-speed">4.2 m/s</p>
+                        </div>
+                    </div>
+                    <!-- UV Index Card -->
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon"><i class="fa-solid fa-sun"></i></div>
+                        <div class="metric-details">
+                            <h3>UV Index</h3>
+                            <p id="uv-index">3</p>
+                        </div>
+                    </div>
+                    <!-- Pressure Card -->
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon"><i class="fa-solid fa-gauge"></i></div>
+                        <div class="metric-details">
+                            <h3>Air Pressure</h3>
+                            <p id="pressure">1015 hPa</p>
+                        </div>
+                    </div>
+                    <!-- Visibility Card -->
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon"><i class="fa-solid fa-eye"></i></div>
+                        <div class="metric-details">
+                            <h3>Visibility</h3>
+                            <p id="visibility">10 km</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Hourly Forecast Card -->
+                <section class="forecast-section glass-panel col-span-2">
+                    <h2>24-Hour Forecast</h2>
+                    <div class="hourly-scroll-container" id="hourly-forecast-container">
+                        <!-- Dynamic Hourly Forecast Cards -->
+                    </div>
+                </section>
+
+                <!-- Daily Forecast Card -->
+                <section class="forecast-section glass-panel col-span-2">
+                    <h2>7-Day Outlook</h2>
+                    <div class="daily-list-container" id="daily-forecast-container">
+                        <!-- Dynamic Daily Forecast Rows -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
