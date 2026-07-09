@@ -19,9 +19,32 @@
     <div class="bg-glow blue" id="glow-blue"></div>
     <div class="bg-glow purple" id="glow-purple"></div>
 
+    <!-- Mobile Header Bar -->
+    <header class="mobile-header glass-panel" id="mobile-header">
+        <button id="menu-toggle-btn" class="icon-btn" title="Open Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="mobile-brand">
+            <div class="logo-icon">
+                <i class="fa-solid fa-wind"></i>
+            </div>
+            <h2>AeroWeather</h2>
+        </div>
+        <button id="mobile-search-toggle" class="icon-btn" title="Search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+    </header>
+
     <div class="app-container">
+        <!-- Drawer Backdrop Overlay -->
+        <div class="drawer-backdrop" id="drawer-backdrop"></div>
+
         <!-- Sidebar / Navigation Panel -->
-        <aside class="sidebar glass-panel">
+        <aside class="sidebar glass-panel" id="sidebar-drawer">
+            <!-- Close Button for Mobile Drawer -->
+            <button id="close-sidebar-btn" class="icon-btn close-sidebar-btn" title="Close Menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
             <div class="brand">
                 <div class="logo-icon">
                     <i class="fa-solid fa-wind"></i>

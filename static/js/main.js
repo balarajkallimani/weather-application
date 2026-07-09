@@ -25,6 +25,13 @@ const elements = {
     closeError: document.getElementById("close-error"),
     clearRecentsBtn: document.getElementById("clear-recents-btn"),
     
+    // Mobile Drawer navigation elements
+    sidebarDrawer: document.getElementById("sidebar-drawer"),
+    menuToggleBtn: document.getElementById("menu-toggle-btn"),
+    closeSidebarBtn: document.getElementById("close-sidebar-btn"),
+    drawerBackdrop: document.getElementById("drawer-backdrop"),
+    mobileSearchToggle: document.getElementById("mobile-search-toggle"),
+    
     // Dashboard fields
     cityName: document.getElementById("city-name"),
     countryTag: document.getElementById("country-tag"),
@@ -419,6 +426,25 @@ function setupEventListeners() {
         if (e.key === "Enter") triggerSearch();
     });
     
+    // Mobile drawer toggles
+    if (elements.menuToggleBtn) {
+        elements.menuToggleBtn.addEventListener("click", openDrawer);
+    }
+    if (elements.closeSidebarBtn) {
+        elements.closeSidebarBtn.addEventListener("click", closeDrawer);
+    }
+    if (elements.drawerBackdrop) {
+        elements.drawerBackdrop.addEventListener("click", closeDrawer);
+    }
+    if (elements.mobileSearchToggle) {
+        elements.mobileSearchToggle.addEventListener("click", () => {
+            openDrawer();
+            setTimeout(() => {
+                if (elements.citySearch) elements.citySearch.focus();
+            }, 300);
+        });
+    }
+    
     // Unit Switches
     elements.unitC.addEventListener("click", () => {
         if (state.unit !== "C") {
@@ -464,12 +490,24 @@ function setupEventListeners() {
     });
 }
 
+// Drawer Helper Actions
+function openDrawer() {
+    if (elements.sidebarDrawer) elements.sidebarDrawer.classList.add("open");
+    if (elements.drawerBackdrop) elements.drawerBackdrop.classList.add("active");
+}
+
+function closeDrawer() {
+    if (elements.sidebarDrawer) elements.sidebarDrawer.classList.remove("open");
+    if (elements.drawerBackdrop) elements.drawerBackdrop.classList.remove("active");
+}
+
 // Trigger Search
 function triggerSearch() {
     const searchVal = elements.citySearch.value.trim();
     if (searchVal) {
         fetchWeather(searchVal);
         elements.citySearch.value = "";
+        closeDrawer();
     }
 }
 
@@ -551,6 +589,7 @@ function renderRecentsList() {
         
         li.addEventListener("click", () => {
             fetchWeather(city);
+            closeDrawer();
         });
         
         elements.recentList.appendChild(li);
